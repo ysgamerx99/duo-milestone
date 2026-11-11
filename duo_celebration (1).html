@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalaysha Pookie & Jana's Instagram Milestone Celebration! 💖</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@500;600;700&family=Sacramento&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastelPink: '#FFB6C1',
+                        pastelSoftPink: '#FFF0F5',
+                        pastelPurple: '#E6E6FA',
+                        pastelLavender: '#D8BFD8',
+                        pastelMint: '#E0F8E9',
+                        pastelYellow: '#FFF9C4',
+                        pastelBlue: '#E0F7FA',
+                        accentPink: '#FF5E8E',
+                        accentPurple: '#9354D8',
+                        accentGold: '#FFB800'
+                    },
+                    fontFamily: {
+                        fredoka: ['Fredoka', 'sans-serif'],
+                        quicksand: ['Quicksand', 'sans-serif'],
+                        cursive: ['Sacramento', 'cursive'],
+                    },
+                    animation: {
+                        'float': 'float 4s ease-in-out infinite',
+                        'float-reverse': 'floatReverse 4s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 2s infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'bounce-gentle': 'bounceGentle 2s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-14px) rotate(4deg)' },
+                        },
+                        floatReverse: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(14px) rotate(-4deg)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.85', transform: 'scale(1)' },
+                            '50%': { opacity: '1', transform: 'scale(1.04)' },
+                        },
+                        bounceGentle: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-6px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: radial-gradient(circle at 20% 20%, #FFF0F5 0%, #E6E6FA 45%, #E0F8E9 80%, #FFF9C4 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism card styling */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 20px 40px rgba(255, 182, 193, 0.2), 0 8px 16px rgba(147, 84, 216, 0.1);
+        }
+
+        /* Card Flip Styles for Puzzle */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FFF0F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FFB6C1;
+            border-radius: 10px;
+        }
+
+        /* Floating note balloon animation */
+        @keyframes floatUpAndOut {
+            0% { transform: translateY(0) scale(0.8) rotate(-5deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 0.9; }
+            100% { transform: translateY(-110vh) scale(1.1) rotate(10deg); opacity: 0; }
+        }
+
+        .balloon-note {
+            animation: floatUpAndOut 8s ease-in-out forwards;
+        }
+    </style>
+</head>
+<body class="text-gray-700 flex flex-col justify-between min-h-screen relative selection:bg-pastelPink selection:text-white">
+
+    <!-- Floating Background Particles -->
+    <div id="floating-bg" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+    <!-- Sticky Audio Control Header Bar -->
+    <header class="relative z-20 w-full max-w-5xl mx-auto px-4 pt-4 flex justify-between items-center">
+        <div class="flex items-center gap-2 bg-white/70 backdrop-blur-md px-4 py-2 rounded-full border border-white/80 shadow-sm">
+            <span class="animate-pulse text-pink-500">💖</span>
+            <span class="font-fredoka text-xs sm:text-sm font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-600">
+                Kalaysha Pookie & Jana
+            </span>
+        </div>
+
+        <!-- Audio Player Toggle -->
+        <button id="music-toggle-btn" onclick="toggleCuteMusic()" class="bg-white/80 backdrop-blur-md px-4 py-2 rounded-full border border-pink-200 shadow-md hover:shadow-lg transition-all flex items-center gap-2 text-xs font-bold text-pink-600 hover:scale-105 active:scale-95">
+            <i id="music-icon" class="fa-solid fa-music text-pink-400"></i>
+            <span id="music-label">Play Cute Song 🎵</span>
+        </button>
+    </header>
+
+    <!-- Main Container -->
+    <main class="relative z-10 max-w-4xl mx-auto px-4 py-4 flex-grow flex flex-col justify-center items-center w-full">
+
+        <!-- STEP 1: WELCOME SCREEN -->
+        <section id="step-welcome" class="w-full flex flex-col items-center text-center transition-all duration-500 transform translate-y-0 opacity-100">
+            
+            <!-- Dynamic Polaroid Photo Badges Container -->
+            <div class="flex flex-wrap justify-center gap-6 sm:gap-10 mb-8">
+                
+                <!-- Kalaysha Pookie Polaroid Badge -->
+                <div class="glass-card rounded-3xl p-4 animate-float hover:scale-105 transition-all duration-300 flex flex-col items-center w-48 sm:w-56 relative group">
+                    <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-pink-400/80 text-white text-[10px] uppercase tracking-widest px-3 py-0.5 rounded-full shadow-sm font-fredoka z-10">
+                        100 Followers
+                    </span>
+
+                    <!-- Clickable Photo Uploader -->
+                    <div class="relative w-full aspect-square bg-gradient-to-br from-pink-100 to-purple-100 rounded-2xl overflow-hidden shadow-inner border border-pink-200 flex flex-col items-center justify-center cursor-pointer mb-3 group-hover:border-pink-400 transition" onclick="triggerPhotoUpload('photo-input-1')">
+                        <img id="photo-img-1" src="" alt="Kalaysha Pookie" class="w-full h-full object-cover hidden">
+                        <div id="photo-placeholder-1" class="flex flex-col items-center justify-center text-center p-2">
+                            <span class="text-5xl mb-1 animate-bounce-gentle">🧸</span>
+                            <span class="text-xs font-bold text-pink-500 font-fredoka">Tap to Add Photo</span>
+                            <span class="text-[10px] text-gray-400">(or keep cute bear)</span>
+                        </div>
+                        <input type="file" id="photo-input-1" accept="image/*" class="hidden" onchange="handlePhotoUpload(event, 'photo-img-1', 'photo-placeholder-1')">
+                    </div>
+
+                    <div class="flex items-center gap-1.5">
+                        <h3 class="font-fredoka text-xl font-bold text-pink-600">Kalaysha Pookie</h3>
+                        <span class="text-sm">🌸</span>
+                    </div>
+                    <div class="mt-1 bg-gradient-to-r from-pink-500 to-rose-400 text-white font-fredoka text-xs font-bold px-3 py-1 rounded-full shadow-sm flex items-center gap-1">
+                        <i class="fa-solid fa-heart text-[10px]"></i> 100 Squad
+                    </div>
+                </div>
+
+                <!-- Jana Polaroid Badge -->
+                <div class="glass-card rounded-3xl p-4 animate-float-reverse hover:scale-105 transition-all duration-300 flex flex-col items-center w-48 sm:w-56 relative group" style="animation-delay: 0.5s;">
+                    <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-500/80 text-white text-[10px] uppercase tracking-widest px-3 py-0.5 rounded-full shadow-sm font-fredoka z-10">
+                        400 Followers
+                    </span>
+
+                    <!-- Clickable Photo Uploader -->
+                    <div class="relative w-full aspect-square bg-gradient-to-br from-purple-100 to-indigo-100 rounded-2xl overflow-hidden shadow-inner border border-purple-200 flex flex-col items-center justify-center cursor-pointer mb-3 group-hover:border-purple-400 transition" onclick="triggerPhotoUpload('photo-input-2')">
+                        <img id="photo-img-2" src="" alt="Jana" class="w-full h-full object-cover hidden">
+                        <div id="photo-placeholder-2" class="flex flex-col items-center justify-center text-center p-2">
+                            <span class="text-5xl mb-1 animate-bounce-gentle">👑</span>
+                            <span class="text-xs font-bold text-purple-600 font-fredoka">Tap to Add Photo</span>
+                            <span class="text-[10px] text-gray-400">(or keep crown)</span>
+                        </div>
+                        <input type="file" id="photo-input-2" accept="image/*" class="hidden" onchange="handlePhotoUpload(event, 'photo-img-2', 'photo-placeholder-2')">
+                    </div>
+
+                    <div class="flex items-center gap-1.5">
+                        <h3 class="font-fredoka text-xl font-bold text-purple-600">Jana</h3>
+                        <span class="text-sm">✨</span>
+                    </div>
+                    <div class="mt-1 bg-gradient-to-r from-purple-600 to-indigo-500 text-white font-fredoka text-xs font-bold px-3 py-1 rounded-full shadow-sm flex items-center gap-1">
+                        <i class="fa-solid fa-star text-[10px]"></i> 400 Superstar
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Main Title Box -->
+            <div class="glass-card rounded-3xl p-6 sm:p-8 max-w-xl w-full text-center relative overflow-hidden">
+                <div class="absolute -right-8 -top-8 w-24 h-24 bg-pink-200/40 rounded-full blur-xl pointer-events-none"></div>
+                <div class="absolute -left-8 -bottom-8 w-24 h-24 bg-purple-200/40 rounded-full blur-xl pointer-events-none"></div>
+
+                <span class="inline-block px-4 py-1.5 bg-pink-100/90 text-pink-600 font-fredoka text-xs font-bold rounded-full mb-3 shadow-xs border border-pink-200">
+                    ✨ Instagram Milestone Celebration ✨
+                </span>
+                
+                <h1 class="font-fredoka text-3xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-600 mb-4 leading-tight">
+                    Double The Milestones, Double The Love! 🥳
+                </h1>
+                
+                <p class="text-gray-600 text-sm sm:text-base font-medium mb-6 leading-relaxed">
+                    Huge applause for <span class="font-bold text-pink-500">Kalaysha Pookie</span> reaching <span class="font-bold text-pink-500">100 followers</span> and <span class="font-bold text-purple-600">Jana</span> blasting past <span class="font-bold text-purple-600">400 followers</span>! Play the cute memory match puzzle to unlock your celebratory gift! 🎁
+                </p>
+
+                <!-- Action Button -->
+                <button onclick="startPuzzle()" class="w-full sm:w-auto px-9 py-4 bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 hover:from-pink-500 hover:via-purple-500 hover:to-indigo-500 text-white font-fredoka font-bold text-lg rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 flex items-center justify-center gap-3 mx-auto group">
+                    <span>Unlock Memory Puzzle</span>
+                    <i class="fa-solid fa-wand-magic-sparkles group-hover:rotate-12 transition-transform"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- STEP 2: PUZZLE MINI-GAME -->
+        <section id="step-puzzle" class="w-full flex flex-col items-center transition-all duration-500 hidden opacity-0 translate-y-8">
+            <div class="glass-card rounded-3xl p-5 sm:p-8 max-w-xl w-full text-center">
+                
+                <!-- Game Header -->
+                <div class="flex justify-between items-center mb-3">
+                    <div class="text-left">
+                        <span class="text-[10px] uppercase font-bold text-purple-500 tracking-wider">Interactive Puzzle</span>
+                        <h2 class="font-fredoka text-2xl text-purple-700 font-bold">Cute Memory Match 🧩</h2>
+                    </div>
+                    <div class="flex gap-2">
+                        <div class="bg-pink-100 px-3 py-1 rounded-xl border border-pink-200 text-center">
+                            <span class="text-[10px] font-bold text-pink-500 block">MOVES</span>
+                            <span id="move-counter" class="font-fredoka text-base font-bold text-pink-700">0</span>
+                        </div>
+                        <div class="bg-purple-100 px-3 py-1 rounded-xl border border-purple-200 text-center">
+                            <span class="text-[10px] font-bold text-purple-500 block">TIME</span>
+                            <span id="timer-counter" class="font-fredoka text-base font-bold text-purple-700">00:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full bg-gray-100 rounded-full h-3 mb-4 overflow-hidden p-0.5 border border-pink-100">
+                    <div id="puzzle-progress" class="bg-gradient-to-r from-pink-400 to-purple-500 h-full rounded-full w-0 transition-all duration-300"></div>
+                </div>
+
+                <p class="text-xs sm:text-sm text-gray-500 mb-4">Find all 8 matching icon pairs to unlock the surprise!</p>
+
+                <!-- Puzzle Board Grid -->
+                <div id="puzzle-board" class="grid grid-cols-4 gap-2 sm:gap-3 my-2 mx-auto max-w-md aspect-square">
+                    <!-- Cards injected dynamically -->
+                </div>
+
+                <!-- Status message -->
+                <div id="puzzle-message" class="mt-4 text-xs font-bold text-purple-600 min-h-[1.5rem]">
+                    Tap any card to begin! 💖
+                </div>
+            </div>
+        </section>
+
+        <!-- STEP 3: GRAND CELEBRATION SCREEN -->
+        <section id="step-celebration" class="w-full flex flex-col items-center transition-all duration-500 hidden opacity-0 translate-y-8">
+            
+            <!-- Header Title -->
+            <div class="text-center mb-6">
+                <span class="text-5xl animate-bounce-slow inline-block">🎉</span>
+                <h2 class="font-fredoka text-3xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600">
+                    Congratulations Kalaysha & Jana! 🏆
+                </h2>
+                <p class="text-gray-600 font-semibold text-sm sm:text-base mt-1">Puzzle Solved! Your customized duo cards are unlocked!</p>
+            </div>
+
+            <!-- Duo Greeting Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-3xl mb-8">
+                
+                <!-- Card 1: Kalaysha Pookie -->
+                <div class="glass-card rounded-3xl p-6 border-2 border-pink-200 hover:border-pink-400 transition-all hover:-translate-y-1 flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-pink-200/50 rounded-full blur-md"></div>
+                    <div>
+                        <!-- Polaroid Card Frame -->
+                        <div class="bg-white p-3 rounded-2xl shadow-md border border-pink-100 mb-4 transform -rotate-1 hover:rotate-0 transition-transform">
+                            <div class="w-full h-40 rounded-xl overflow-hidden bg-gradient-to-tr from-pink-100 to-pink-200 flex flex-col items-center justify-center border border-pink-200">
+                                <img id="celeb-img-1" src="" alt="Kalaysha Pookie" class="w-full h-full object-cover hidden">
+                                <div id="celeb-avatar-1" class="flex flex-col items-center justify-center">
+                                    <span class="text-5xl mb-1">🧸</span>
+                                    <span class="text-xs font-bold text-pink-500 font-fredoka">Kalaysha Pookie</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="bg-pink-100 text-pink-600 font-fredoka font-bold text-xs px-3 py-1 rounded-full border border-pink-200">
+                                🌸 Milestone 1
+                            </span>
+                            <span class="text-2xl">💖</span>
+                        </div>
+
+                        <h3 class="font-fredoka text-2xl font-bold text-pink-600 mb-1">Kalaysha Pookie</h3>
+                        <p class="text-xs font-bold text-pink-400 mb-3">100 Instagram Followers Queen 👑</p>
+                        
+                        <p class="text-gray-600 text-xs sm:text-sm leading-relaxed italic bg-pink-50/70 p-4 rounded-2xl border border-pink-100">
+                            "Huge congrats on hitting 100 followers, Kalaysha Pookie! 🌸 Triple digits! Your content is adorable, your vibe is unmatched, and 100 people agree how special you are. Here's to 1,000 next!"
+                        </p>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-pink-100 flex justify-between items-center text-xs font-bold text-pink-500">
+                        <span>#Kalaysha100</span>
+                        <span>100 Followers ✨</span>
+                    </div>
+                </div>
+
+                <!-- Card 2: Jana -->
+                <div class="glass-card rounded-3xl p-6 border-2 border-purple-200 hover:border-purple-400 transition-all hover:-translate-y-1 flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-purple-200/50 rounded-full blur-md"></div>
+                    <div>
+                        <!-- Polaroid Card Frame -->
+                        <div class="bg-white p-3 rounded-2xl shadow-md border border-purple-100 mb-4 transform rotate-1 hover:rotate-0 transition-transform">
+                            <div class="w-full h-40 rounded-xl overflow-hidden bg-gradient-to-tr from-purple-100 to-indigo-200 flex flex-col items-center justify-center border border-purple-200">
+                                <img id="celeb-img-2" src="" alt="Jana" class="w-full h-full object-cover hidden">
+                                <div id="celeb-avatar-2" class="flex flex-col items-center justify-center">
+                                    <span class="text-5xl mb-1">👑</span>
+                                    <span class="text-xs font-bold text-purple-600 font-fredoka">Jana</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="bg-purple-100 text-purple-600 font-fredoka font-bold text-xs px-3 py-1 rounded-full border border-purple-200">
+                                ⭐ Milestone 2
+                            </span>
+                            <span class="text-2xl">🎉</span>
+                        </div>
+
+                        <h3 class="font-fredoka text-2xl font-bold text-purple-600 mb-1">Jana</h3>
+                        <p class="text-xs font-bold text-purple-400 mb-3">400 Instagram Followers Superstar 🚀</p>
+                        
+                        <p class="text-gray-600 text-xs sm:text-sm leading-relaxed italic bg-purple-50/70 p-4 rounded-2xl border border-purple-100">
+                            "400 followers is massive, Jana! 👑 You are constantly shining and creating amazing content. Everyone loves watching your journey grow. Next stop: 1K!"
+                        </p>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-purple-100 flex justify-between items-center text-xs font-bold text-purple-500">
+                        <span>#Jana400</span>
+                        <span>400 Squad 👑</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Floating Love Note Creator Section -->
+            <div class="w-full max-w-3xl glass-card rounded-3xl p-6 mb-8 text-center">
+                <h4 class="font-fredoka text-xl font-bold text-purple-700 mb-1">💌 Send a Floating Heart Balloon Note!</h4>
+                <p class="text-xs text-gray-500 mb-4">Type a sweet custom message for Kalaysha & Jana to release it into the air!</p>
+                
+                <div class="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
+                    <input type="text" id="love-note-input" placeholder="e.g., Proud of you both! 💕" class="flex-grow px-4 py-2.5 rounded-2xl border border-purple-200 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400">
+                    <button onclick="sendLoveNote()" class="px-5 py-2.5 bg-gradient-to-r from-pink-400 to-purple-500 hover:from-pink-500 hover:to-purple-600 text-white font-fredoka font-bold rounded-2xl shadow-md transition-all active:scale-95">
+                        Release Balloon 🎈
+                    </button>
+                </div>
+            </div>
+
+            <!-- Total Duo Power Banner -->
+            <div class="w-full max-w-3xl bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 p-1 rounded-3xl shadow-xl mb-8">
+                <div class="bg-white/95 backdrop-blur-sm rounded-[22px] p-6 text-center">
+                    <h4 class="font-fredoka text-2xl font-bold text-purple-800 mb-2">
+                        💞 Total Combined Reach: 500 Followers! 💞
+                    </h4>
+                    <p class="text-xs sm:text-sm text-gray-600 max-w-lg mx-auto leading-relaxed">
+                        Together, Kalaysha Pookie (100) and Jana (400) have built a community of half a thousand followers! You two are an unstoppable duo!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Buttons Action -->
+            <div class="flex flex-wrap gap-4 justify-center">
+                <button onclick="triggerConfettiBurst()" class="px-6 py-3 bg-pink-400 hover:bg-pink-500 text-white font-fredoka font-bold rounded-2xl shadow-md transition-all flex items-center gap-2 active:scale-95">
+                    <span>Confetti Cannon</span> 🎊
+                </button>
+                <button onclick="downloadSummaryCard()" class="px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white font-fredoka font-bold rounded-2xl shadow-md transition-all flex items-center gap-2 active:scale-95">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Download Duo Badge</span>
+                </button>
+                <button onclick="restartExperience()" class="px-6 py-3 bg-white border-2 border-purple-300 hover:bg-purple-50 text-purple-600 font-fredoka font-bold rounded-2xl shadow-md transition-all flex items-center gap-2 active:scale-95">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <span>Replay</span>
+                </button>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 text-center py-4 text-xs font-bold text-purple-400/90">
+        Made with 💖 for Kalaysha Pookie & Jana
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // State Management
+        let isMusicPlaying = false;
+        let audioCtx = null;
+        let bgMusicOsc = null;
+        let timerInterval = null;
+        let secondsElapsed = 0;
+        let moveCount = 0;
+        let matchedPairs = 0;
+        let flippedCards = [];
+        let canFlip = true;
+
+        // Custom uploaded image stores
+        let uploadedPhoto1 = null;
+        let uploadedPhoto2 = null;
+
+        // Emoji cards for memory game
+        const puzzleItems = [
+            { icon: '🧸', label: 'Bear' },
+            { icon: '👑', label: 'Crown' },
+            { icon: '📸', label: 'Camera' },
+            { icon: '💖', label: 'Heart' },
+            { icon: '⭐', label: 'Star' },
+            { icon: '🎉', label: 'Party' },
+            { icon: '💯', label: '100' },
+            { icon: '🚀', label: 'Rocket' }
+        ];
+
+        // Web Audio API Synthesizer Sound Generator
+        function getAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        // Sound Effect Synth
+        function playCuteSound(type = 'pop') {
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                const now = ctx.currentTime;
+
+                if (type === 'pop') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400, now);
+                    osc.frequency.exponentialRampToValueAtTime(800, now + 0.08);
+                    gain.gain.setValueAtTime(0.3, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.08);
+                } else if (type === 'match') {
+                    // Cute chime chord
+                    [523.25, 659.25, 783.99].forEach((freq, idx) => {
+                        const chordOsc = ctx.createOscillator();
+                        const chordGain = ctx.createGain();
+                        chordOsc.type = 'triangle';
+                        chordOsc.frequency.setValueAtTime(freq, now + idx * 0.05);
+                        chordGain.gain.setValueAtTime(0.15, now + idx * 0.05);
+                        chordGain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.05 + 0.25);
+                        chordOsc.connect(chordGain);
+                        chordGain.connect(ctx.destination);
+                        chordOsc.start(now + idx * 0.05);
+                        chordOsc.stop(now + idx * 0.05 + 0.25);
+                    });
+                } else if (type === 'victory') {
+                    // Fanfare flourish
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
+                    notes.forEach((freq, idx) => {
+                        const fanOsc = ctx.createOscillator();
+                        const fanGain = ctx.createGain();
+                        fanOsc.type = 'sine';
+                        fanOsc.frequency.setValueAtTime(freq, now + idx * 0.1);
+                        fanGain.gain.setValueAtTime(0.2, now + idx * 0.1);
+                        fanGain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.1 + 0.4);
+                        fanOsc.connect(fanGain);
+                        fanOsc.connect(ctx.destination);
+                        fanOsc.start(now + idx * 0.1);
+                        fanOsc.stop(now + idx * 0.1 + 0.4);
+                    });
+                }
+            } catch(e) {}
+        }
+
+        // Synthesized Gentle Lullaby Music Generator
+        function toggleCuteMusic() {
+            const btnLabel = document.getElementById('music-label');
+            const btnIcon = document.getElementById('music-icon');
+            
+            if (isMusicPlaying) {
+                if (bgMusicOsc) {
+                    bgMusicOsc.stop();
+                    bgMusicOsc = null;
+                }
+                isMusicPlaying = false;
+                btnLabel.innerText = 'Play Cute Song 🎵';
+                btnIcon.className = 'fa-solid fa-music text-pink-400';
+            } else {
+                const ctx = getAudioContext();
+                isMusicPlaying = true;
+                btnLabel.innerText = 'Pause Song ⏸️';
+                btnIcon.className = 'fa-solid fa-pause text-pink-500 animate-pulse';
+
+                // Simple synthesized soothing arpeggio loop
+                const melody = [329.63, 392.00, 440.00, 523.25, 440.00, 392.00];
+                let step = 0;
+
+                function playMelodyLoop() {
+                    if (!isMusicPlaying) return;
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    const now = ctx.currentTime;
+
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(melody[step % melody.length], now);
+                    gain.gain.setValueAtTime(0.05, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+
+                    step++;
+                    setTimeout(playMelodyLoop, 450);
+                }
+
+                playMelodyLoop();
+            }
+        }
+
+        // Photo Upload Logic
+        function triggerPhotoUpload(inputId) {
+            document.getElementById(inputId).click();
+        }
+
+        function handlePhotoUpload(event, imgId, placeholderId) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgData = e.target.result;
+                    
+                    // Update Step 1 image
+                    const imgEl = document.getElementById(imgId);
+                    const placeholderEl = document.getElementById(placeholderId);
+                    imgEl.src = imgData;
+                    imgEl.classList.remove('hidden');
+                    placeholderEl.classList.add('hidden');
+
+                    // Update Step 3 image accordingly
+                    if (imgId === 'photo-img-1') {
+                        uploadedPhoto1 = imgData;
+                        document.getElementById('celeb-img-1').src = imgData;
+                        document.getElementById('celeb-img-1').classList.remove('hidden');
+                        document.getElementById('celeb-avatar-1').classList.add('hidden');
+                    } else {
+                        uploadedPhoto2 = imgData;
+                        document.getElementById('celeb-img-2').src = imgData;
+                        document.getElementById('celeb-img-2').classList.remove('hidden');
+                        document.getElementById('celeb-avatar-2').classList.add('hidden');
+                    }
+
+                    playCuteSound('pop');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Floating Background Elements Initializer
+        function createFloatingBg() {
+            const container = document.getElementById('floating-bg');
+            const symbols = ['💖', '🌸', '✨', '⭐', '🎈', '🧸', '👑', '💫'];
+            const count = 20;
+
+            for (let i = 0; i < count; i++) {
+                const el = document.createElement('div');
+                el.className = 'absolute text-2xl select-none opacity-60 pointer-events-none';
+                el.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                const duration = 5 + Math.random() * 6;
+                const delay = Math.random() * 5;
+                const scale = 0.6 + Math.random() * 0.8;
+
+                el.style.left = `${left}%`;
+                el.style.top = `${top}%`;
+                el.style.animation = `float ${duration}s ease-in-out infinite`;
+                el.style.animationDelay = `${delay}s`;
+                el.style.transform = `scale(${scale})`;
+
+                container.appendChild(el);
+            }
+        }
+
+        // Send Floating Heart Balloon Note
+        function sendLoveNote() {
+            const input = document.getElementById('love-note-input');
+            const noteText = input.value.trim();
+            if (!noteText) return;
+
+            playCuteSound('match');
+
+            const balloon = document.createElement('div');
+            balloon.className = 'fixed z-50 pointer-events-none balloon-note flex flex-col items-center';
+            
+            balloon.innerHTML = `
+                <div class="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-fredoka text-xs px-4 py-2 rounded-2xl shadow-xl flex items-center gap-2 border border-white">
+                    <span>💌</span>
+                    <span>${noteText}</span>
+                </div>
+                <div class="text-3xl -mt-1 leading-none drop-shadow-md">🎈</div>
+            `;
+            
+            const startX = Math.random() * (window.innerWidth - 220) + 20;
+            balloon.style.left = `${startX}px`;
+            balloon.style.bottom = '10px';
+
+            document.body.appendChild(balloon);
+
+            setTimeout(() => {
+                balloon.remove();
+            }, 8000);
+
+            input.value = '';
+        }
+
+        // Confetti Burst Trigger
+        function triggerConfettiBurst() {
+            playCuteSound('victory');
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 120,
+                    spread: 90,
+                    origin: { y: 0.6 },
+                    colors: ['#FFB6C1', '#E6E6FA', '#FF5E8E', '#9354D8', '#FFF9C4', '#FFB800']
+                });
+            }
+        }
+
+        // Start Puzzle Stage
+        function startPuzzle() {
+            playCuteSound('pop');
+            const welcomeSec = document.getElementById('step-welcome');
+            const puzzleSec = document.getElementById('step-puzzle');
+
+            welcomeSec.classList.add('opacity-0', '-translate-y-8');
+            setTimeout(() => {
+                welcomeSec.classList.add('hidden');
+                puzzleSec.classList.remove('hidden');
+                setTimeout(() => {
+                    puzzleSec.classList.remove('opacity-0', 'translate-y-8');
+                    initPuzzleBoard();
+                }, 50);
+            }, 400);
+        }
+
+        // Puzzle Timer Logic
+        function startTimer() {
+            clearInterval(timerInterval);
+            secondsElapsed = 0;
+            const timerEl = document.getElementById('timer-counter');
+            timerInterval = setInterval(() => {
+                secondsElapsed++;
+                const mins = Math.floor(secondsElapsed / 60).toString().padStart(2, '0');
+                const secs = (secondsElapsed % 60).toString().padStart(2, '0');
+                timerEl.innerText = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        // Init / Reset Memory Board
+        function initPuzzleBoard() {
+            const board = document.getElementById('puzzle-board');
+            board.innerHTML = '';
+            moveCount = 0;
+            matchedPairs = 0;
+            flippedCards = [];
+            canFlip = true;
+            document.getElementById('move-counter').innerText = '0';
+            document.getElementById('puzzle-progress').style.width = '0%';
+            document.getElementById('puzzle-message').innerText = 'Tap any card to begin! 💖';
+
+            startTimer();
+
+            const deck = [...puzzleItems, ...puzzleItems].sort(() => Math.random() - 0.5);
+
+            deck.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = 'perspective-1000 w-full h-full min-h-[70px] sm:min-h-[85px] cursor-pointer select-none';
+                card.dataset.index = idx;
+                card.dataset.label = item.label;
+
+                card.innerHTML = `
+                    <div class="card-inner w-full h-full relative transform-style-3d transition-transform duration-500 rounded-2xl shadow-md">
+                        <div class="absolute inset-0 bg-gradient-to-br from-pink-200 to-purple-200 border-2 border-white rounded-2xl flex items-center justify-center backface-hidden shadow-inner">
+                            <span class="text-2xl text-purple-400 font-bold font-fredoka">✨</span>
+                        </div>
+                        <div class="absolute inset-0 bg-white border-2 border-pink-300 rounded-2xl flex items-center justify-center rotate-y-180 backface-hidden shadow-md">
+                            <span class="text-3xl sm:text-4xl animate-bounce-gentle">${item.icon}</span>
+                        </div>
+                    </div>
+                `;
+
+                card.addEventListener('click', () => handleCardClick(card));
+                board.appendChild(card);
+            });
+        }
+
+        // Handle Card Flipping Logic
+        function handleCardClick(card) {
+            if (!canFlip) return;
+            const inner = card.querySelector('.card-inner');
+            
+            if (inner.classList.contains('rotate-y-180') || card.classList.contains('matched')) return;
+
+            playCuteSound('pop');
+            inner.classList.add('rotate-y-180');
+            flippedCards.push(card);
+
+            if (flippedCards.length === 2) {
+                moveCount++;
+                document.getElementById('move-counter').innerText = moveCount;
+                canFlip = false;
+
+                const card1 = flippedCards[0];
+                const card2 = flippedCards[1];
+
+                if (card1.dataset.label === card2.dataset.label) {
+                    playCuteSound('match');
+                    card1.classList.add('matched');
+                    card2.classList.add('matched');
+                    matchedPairs++;
+                    
+                    const progressPercent = (matchedPairs / puzzleItems.length) * 100;
+                    document.getElementById('puzzle-progress').style.width = `${progressPercent}%`;
+
+                    flippedCards = [];
+                    canFlip = true;
+
+                    if (matchedPairs === puzzleItems.length) {
+                        clearInterval(timerInterval);
+                        document.getElementById('puzzle-message').innerText = '🎉 Fantastic! Unlocking celebration cards...';
+                        setTimeout(() => {
+                            finishPuzzle();
+                        }, 900);
+                    }
+                } else {
+                    setTimeout(() => {
+                        card1.querySelector('.card-inner').classList.remove('rotate-y-180');
+                        card2.querySelector('.card-inner').classList.remove('rotate-y-180');
+                        flippedCards = [];
+                        canFlip = true;
+                    }, 800);
+                }
+            }
+        }
+
+        // Complete Puzzle & Show Celebration
+        function finishPuzzle() {
+            const puzzleSec = document.getElementById('step-puzzle');
+            const celebSec = document.getElementById('step-celebration');
+
+            puzzleSec.classList.add('opacity-0', 'translate-y-8');
+            setTimeout(() => {
+                puzzleSec.classList.add('hidden');
+                celebSec.classList.remove('hidden');
+                setTimeout(() => {
+                    celebSec.classList.remove('opacity-0', 'translate-y-8');
+                    triggerConfettiBurst();
+                }, 50);
+            }, 400);
+        }
+
+        // Replay/Restart Flow
+        function restartExperience() {
+            const celebSec = document.getElementById('step-celebration');
+            const welcomeSec = document.getElementById('step-welcome');
+
+            celebSec.classList.add('opacity-0', 'translate-y-8');
+            setTimeout(() => {
+                celebSec.classList.add('hidden');
+                welcomeSec.classList.remove('hidden');
+                setTimeout(() => {
+                    welcomeSec.classList.remove('opacity-0', '-translate-y-8');
+                }, 50);
+            }, 400);
+        }
+
+        // Download Summary SVG Badge Generator
+        function downloadSummaryCard() {
+            playCuteSound('pop');
+
+            const svgData = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+                    <defs>
+                        <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#FFF0F5"/>
+                            <stop offset="50%" stop-color="#E6E6FA"/>
+                            <stop offset="100%" stop-color="#E0F8E9"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="600" height="400" rx="30" fill="url(#grad)" stroke="#FFB6C1" stroke-width="4"/>
+                    <text x="300" y="70" font-family="sans-serif" font-size="28" font-weight="bold" fill="#9354D8" text-anchor="middle">✨ Kalaysha Pookie &amp; Jana ✨</text>
+                    <text x="300" y="105" font-family="sans-serif" font-size="16" fill="#FF5E8E" text-anchor="middle">Instagram Milestone Duo Celebration</text>
+
+                    <!-- Kalaysha Box -->
+                    <rect x="50" y="140" width="230" height="180" rx="20" fill="#FFFFFF" stroke="#FFB6C1" stroke-width="2"/>
+                    <text x="165" y="180" font-family="sans-serif" font-size="40" text-anchor="middle">🧸</text>
+                    <text x="165" y="220" font-family="sans-serif" font-size="20" font-weight="bold" fill="#FF5E8E" text-anchor="middle">Kalaysha Pookie</text>
+                    <text x="165" y="250" font-family="sans-serif" font-size="14" font-weight="bold" fill="#9354D8" text-anchor="middle">100 Followers Queen 👑</text>
+
+                    <!-- Jana Box -->
+                    <rect x="320" y="140" width="230" height="180" rx="20" fill="#FFFFFF" stroke="#D8BFD8" stroke-width="2"/>
+                    <text x="435" y="180" font-family="sans-serif" font-size="40" text-anchor="middle">👑</text>
+                    <text x="435" y="220" font-family="sans-serif" font-size="20" font-weight="bold" fill="#9354D8" text-anchor="middle">Jana</text>
+                    <text x="435" y="250" font-family="sans-serif" font-size="14" font-weight="bold" fill="#FF5E8E" text-anchor="middle">400 Followers Superstar ⭐</text>
+
+                    <text x="300" y="365" font-family="sans-serif" font-size="16" font-weight="bold" fill="#9354D8" text-anchor="middle">Combined Duo Reach: 500 Followers! 🎉</text>
+                </svg>
+            `;
+
+            const blob = new Blob([svgData], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Kalaysha_and_Jana_Milestone_Badge.svg';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Window Load Handler
+        window.onload = function() {
+            createFloatingBg();
+        };
+    </script>
+</body>
+</html>
